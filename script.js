@@ -7,7 +7,7 @@ let spinCount = 0;
 const TOTAL_SPINS = 15;
 
 const messages = [
-  "INICIA EL QUE LLEGÓ MÁS TARDE",
+  "LO DEBE TENER EL QUE LLEGÓ MÁS TARDE",
   "PÁSALO 3 A LA IZQUIERDA 👈",
   "PÁSALO AL DEL FRENTE 👀",
   "PÁSALO 7 A LA DERECHA",
@@ -15,6 +15,11 @@ const messages = [
   "AHORA LO TENDRÁ EL QUE HA COMIDO MÁS",
   "DASELO AL QUE HA HABLADO MENOS",
   "PÁSALO A 5 A LA IZQUIERDA"
+  "PÁSALO AL MÁS FASHIONISTA"
+  "PÁSALO A 1 A LA IZQUIERDA"
+  "PÁSALO A QUIÉN HA BAILADO MÁS"
+  "PÁSALO AL QUE PONE LA MÚSICA"
+  "PON EL REGALO EN EL ASIENTO Y TODOS SE MEZCLAN"
 ];
 
 btn.addEventListener("click", () => {
