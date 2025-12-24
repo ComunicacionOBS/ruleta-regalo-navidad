@@ -10,99 +10,93 @@ let messages = [
   "LO DEBE TENER EL QUE LLEGÓ MÁS TARDE",
   "PÁSALO 3 A LA IZQUIERDA 👈",
   "PÁSALO AL DEL FRENTE 👀",
-  "PÁSALO 7 A LA DERECHA",
-  "EL REGALO LO DEBE TENER EL MÁS NAVIDEÑO",
-  "AHORA LO TENDRÁ EL QUE HA COMIDO MÁS",
-  "DÁSELO AL QUE HA HABLADO MENOS",
-  "PÁSALO 5 A LA IZQUIERDA",
-  "PÁSALO AL MÁS FASHIONISTA",
-  "PÁSALO 1 A LA IZQUIERDA",
-  "PÁSALO A QUIEN HA BAILADO MÁS",
-  "PÁSALO AL QUE PONE LA MÚSICA",
-  "PON EL REGALO EN EL ASIENTO Y TODOS SE MEZCLAN"
+  "PÁSALO 7 A LA DERECHA 👉",
+  "EL MÁS NAVIDEÑO LO TIENE 🎄",
+  "AHORA LO TIENE QUIEN MÁS HA COMIDO 🍗",
+  "DÁSELO AL QUE HA HABLADO MENOS 🤫",
+  "PÁSALO 5 A LA IZQUIERDA 👈",
+  "PÁSALO AL MÁS FASHIONISTA ✨",
+  "PÁSALO 1 A LA IZQUIERDA 👈",
+  "PÁSALO AL QUE BAILA MÁS 💃",
+  "PÁSALO AL QUE PONE LA MÚSICA 🎶",
+  "TODOS SE LEVANTAN Y CAMBIAN DE LUGAR 🤯"
 ];
 
-// ---- evitar repeticiones: barajamos y usamos una por vez ----
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-}
-shuffle(messages);
+// mensaje especial solo para el último giro
+const FINAL_MOVES = [
+  "👉 PÁSALO 8 A LA DERECHA — ÚLTIMO MOVIMIENTO",
+  "👈 PÁSALO 6 A LA IZQUIERDA — ÚLTIMO MOVIMIENTO",
+  "➡️ PÁSALO AL SEGUNDO A TU DERECHA — FINAL",
+  "⬅️ PÁSALO AL SEGUNDO A TU IZQUIERDA — FINAL"
+];
 
-// ---- dibujar ruleta con textos ----
+// dibujar ruleta
 const ctx = wheel.getContext("2d");
-const numSegments = messages.length;
-const angle = (2 * Math.PI) / numSegments;
+const slice = (2 * Math.PI) / messages.length;
 
 function drawWheel() {
-  for (let i = 0; i < numSegments; i++) {
-    const start = i * angle;
-    const end = start + angle;
-
+  for (let i = 0; i < messages.length; i++) {
     ctx.beginPath();
-    ctx.moveTo(200, 200);
-    ctx.arc(200, 200, 200, start, end);
-    ctx.fillStyle = i % 2 === 0 ? "#f4a261" : "#e9c46a";
-    ctx.fill();
-    ctx.stroke();
+    ctx.moveTo(210, 210);
+    ctx.arc(210, 210, 210, slice * i, slice * (i + 1));
+    ctx.closePath();
 
-    // texto
+    ctx.fillStyle = i % 2 === 0 ? "#c1121f" : "#1d3557";
+    ctx.fill();
+
     ctx.save();
-    ctx.translate(200, 200);
-    ctx.rotate(start + angle / 2);
+    ctx.translate(210, 210);
+    ctx.rotate(slice * i + slice / 2);
+    ctx.fillStyle = "white";
+    ctx.font = "14px Poppins";
     ctx.textAlign = "right";
-    ctx.fillStyle = "#000";
-    ctx.font = "14px Arial";
-    ctx.fillText(messages[i], 180, 5);
+    ctx.fillText(messages[i], 185, 5);
     ctx.restore();
   }
 }
 
 drawWheel();
 
-// ---- acción del giro ----
+// girar
 btn.addEventListener("click", () => {
   if (spinCount >= TOTAL_SPINS) return;
 
   spinCount++;
 
-  const extra = 720 + Math.floor(Math.random() * 360);
+  const extra = 720 + Math.random() * 360;
   rotation += extra;
-
-  wheel.style.transition = "transform 3.2s ease-out";
+  wheel.style.transition = "3.4s ease-out";
   wheel.style.transform = `rotate(${rotation}deg)`;
 
   setTimeout(() => {
-    // EPIC FINAL
+    // último giro: tensión + movimiento final
     if (spinCount === TOTAL_SPINS) {
-      result.innerText = "😳 Parece que ya tenemos ganador…";
-      
-      setTimeout(() => {
-        result.innerText = "😱 ¡PERO ESPEREN…!";
-      }, 1500);
+      const finalMove =
+        FINAL_MOVES[Math.floor(Math.random() * FINAL_MOVES.length)];
+
+      result.innerText = "🤯 PARECE QUE YA… ESPEREN…";
 
       setTimeout(() => {
-        result.innerText = "🎁✨ EL REGALO LO GANA… QUIEN USTEDES DECIDAN 😏";
-        btn.disabled = true;
-      }, 3500);
+        result.innerText = "😱 NO — AÚN NO TERMINA…";
+
+        setTimeout(() => {
+          result.innerText = finalMove;
+          btn.disabled = true;
+        }, 2200);
+      }, 2000);
 
       return;
     }
 
-    // tomar siguiente mensaje sin repetir
-    const msg = messages.shift();
-    result.innerText = msg;
+    // sin repetir frases
+    const index = Math.floor(Math.random() * messages.length);
+    const chosen = messages[index];
+    messages.splice(index, 1);
 
-    // si se acaban, volvemos a barajar por si acaso
-    if (messages.length === 0) {
-      messages = [...messages];
-      shuffle(messages);
-    }
-
-  }, 3300);
+    result.innerText = chosen;
+  }, 3400);
 });
+
 
 
 
