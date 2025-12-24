@@ -2,52 +2,39 @@ const wheel = document.getElementById("wheel");
 const btn = document.getElementById("spinBtn");
 const result = document.getElementById("result");
 
-let currentRotation = 0;
-let spins = 0;
+let rotation = 0;
+let spinCount = 0;
 const TOTAL_SPINS = 15;
 
-// Este es el arreglo de textos (puedes cambiar)
-const texts = [
-  "Pasalo 3 a la derecha",
-  "Pasalo 4 a la izquierda",
-  "Al del frente",
-  "Respirá...",
-  "Se queda con…",
-  "Es para…",
-  "Últimos giros",
-  "🎁 TUYOOOO"
+const messages = [
+  "Pásalo a la derecha 👉",
+  "Pásalo a la izquierda 👈",
+  "Al del frente 👀",
+  "El regalo se queda con…",
+  "El regalo es para…",
+  "Respirá… 😮‍💨",
+  "Todo puede pasar…",
+  "Últimos giros… 🔥"
 ];
 
 btn.addEventListener("click", () => {
-  if (spins >= TOTAL_SPINS) return;
+  if (spinCount >= TOTAL_SPINS) return;
 
-  spins++;
+  spinCount++;
 
-  // cálculo del ángulo
-  const randomDegrees = Math.floor(Math.random() * 360) + 720;
-  currentRotation += randomDegrees;
+  const extra = 720 + Math.floor(Math.random() * 360);
+  rotation += extra;
 
-  // FORZAR repaint antes de animar
-  wheel.style.transition = "none";
-  wheel.style.transform = `rotate(${currentRotation}deg)`;
+  wheel.style.transform = `rotate(${rotation}deg)`;
 
   setTimeout(() => {
-    // ahora sí con transición
-    wheel.style.transition = "transform 2s ease-out";
-    wheel.style.transform = `rotate(${currentRotation + randomDegrees}deg)`;
-    currentRotation += randomDegrees;
-  }, 20);
-
-  if (spins === TOTAL_SPINS) {
-    btn.disabled = true;
-    setTimeout(() => {
-      result.innerText = "🎉🎁 ¡EL REGALO ES TUYOOOO!";
-    }, 2300);
-  } else {
-    // mensaje intermedio
-    const idx = Math.floor(Math.random() * (texts.length - 1));
-    setTimeout(() => {
-      result.innerText = texts[idx];
-    }, 2300);
-  }
+    if (spinCount === TOTAL_SPINS) {
+      result.innerText = "🎁🎉 ¡EL REGALO ES TUYOOOO!";
+      btn.disabled = true;
+    } else {
+      const msg = messages[Math.floor(Math.random() * messages.length)];
+      result.innerText = msg;
+    }
+  }, 3200);
 });
+
