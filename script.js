@@ -1,6 +1,7 @@
 const wheel = document.getElementById("wheel");
 const btn = document.getElementById("spinBtn");
 const result = document.getElementById("result");
+const tickSound = document.getElementById("tickSound");
 
 let rotation = 0;
 let spinCount = 0;
@@ -11,23 +12,15 @@ let messages = [
   "PÁSALO 3 A LA IZQUIERDA 👈",
   "PÁSALO AL DEL FRENTE 👀",
   "PÁSALO 7 A LA DERECHA 👉",
-  "EL MÁS NAVIDEÑO LO TIENE 🎄",
+  "LO TIENE EL MÁS NAVIDEÑO 🎄",
   "AHORA LO TIENE QUIEN MÁS HA COMIDO 🍗",
   "DÁSELO AL QUE HA HABLADO MENOS 🤫",
   "PÁSALO 5 A LA IZQUIERDA 👈",
   "PÁSALO AL MÁS FASHIONISTA ✨",
   "PÁSALO 1 A LA IZQUIERDA 👈",
-  "PÁSALO AL QUE BAILA MÁS 💃",
+  "PÁSALO A QUIEN HA BAILADO MÁS 💃",
   "PÁSALO AL QUE PONE LA MÚSICA 🎶",
-  "TODOS SE LEVANTAN Y CAMBIAN DE LUGAR 🤯"
-];
-
-// mensaje especial solo para el último giro
-const FINAL_MOVES = [
-  "👉 PÁSALO 8 A LA DERECHA — ÚLTIMO MOVIMIENTO",
-  "👈 PÁSALO 6 A LA IZQUIERDA — ÚLTIMO MOVIMIENTO",
-  "➡️ PÁSALO AL SEGUNDO A TU DERECHA — FINAL",
-  "⬅️ PÁSALO AL SEGUNDO A TU IZQUIERDA — FINAL"
+  "TODOS CAMBIAN DE LUGAR 🤯"
 ];
 
 // dibujar ruleta
@@ -57,11 +50,14 @@ function drawWheel() {
 
 drawWheel();
 
-// girar
 btn.addEventListener("click", () => {
   if (spinCount >= TOTAL_SPINS) return;
 
   spinCount++;
+
+  // reproducir sonido de clic
+  tickSound.currentTime = 0;
+  tickSound.play();
 
   const extra = 720 + Math.random() * 360;
   rotation += extra;
@@ -69,26 +65,32 @@ btn.addEventListener("click", () => {
   wheel.style.transform = `rotate(${rotation}deg)`;
 
   setTimeout(() => {
-    // último giro: tensión + movimiento final
+    // último giro
     if (spinCount === TOTAL_SPINS) {
-      const finalMove =
-        FINAL_MOVES[Math.floor(Math.random() * FINAL_MOVES.length)];
-
-      result.innerText = "🤯 PARECE QUE YA… ESPEREN…";
+      result.innerText = "🤯 PARECE QUE YA HAY UNA DECISIÓN…";
 
       setTimeout(() => {
-        result.innerText = "😱 NO — AÚN NO TERMINA…";
+        result.innerText = "😱 PERO ESPEREN…";
+      }, 1500);
 
-        setTimeout(() => {
-          result.innerText = finalMove;
-          btn.disabled = true;
-        }, 2200);
-      }, 2000);
+      setTimeout(() => {
+        result.innerText = "🎉🎁 ¡AHORA SÍ SE DEFINE!";
+      }, 3000);
 
+      setTimeout(() => {
+        // efecto de confeti
+        confetti({
+          particleCount: 150,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }, 3800);
+
+      btn.disabled = true;
       return;
     }
 
-    // sin repetir frases
+    // mensaje sin repetir
     const index = Math.floor(Math.random() * messages.length);
     const chosen = messages[index];
     messages.splice(index, 1);
