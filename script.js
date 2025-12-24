@@ -1,30 +1,27 @@
 const wheel = document.getElementById("wheel");
-const spinBtn = document.getElementById("spinBtn");
+const btn = document.getElementById("spinBtn");
 const result = document.getElementById("result");
 
-let currentRotation = 0;
-let spins = 0;
-const TOTAL_SPINS = 15;
+let rotation = 0;
+let count = 0;
+const TOTAL = 15;
 
-spinBtn.addEventListener("click", () => {
-  if (spins >= TOTAL_SPINS) return;
+btn.addEventListener("click", () => {
+  if (count >= TOTAL) return;
 
-  spins++;
+  count++;
 
-  // Giro aleatorio
-  const randomSpin = Math.floor(Math.random() * 360) + 720;
-  currentRotation += randomSpin;
+  const spin = Math.floor(Math.random() * 360) + 720;
+  rotation += spin;
 
-  wheel.style.transform = `rotate(${currentRotation}deg)`;
+  wheel.style.transform = `rotate(${rotation}deg)`;
 
-  if (spins === TOTAL_SPINS) {
-    spinBtn.disabled = true;
-
+  if (count === TOTAL) {
+    btn.disabled = true;
     setTimeout(() => {
       result.innerHTML = "🎉🎁<br>¡EL REGALO ES TUYOOOO!";
-    }, 1100);
-  } else {
-    result.textContent = "";
+    }, 1400);
   }
 });
+
 
