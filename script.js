@@ -34,7 +34,7 @@ btn.addEventListener("click", () => {
 
   setTimeout(() => {
     if (spinCount === TOTAL_SPINS) {
-      result.innerText = "🎁🎉 ¡EL REGALO ES DE 24 DERECHA!";
+      result.innerText = "🎁🎉 ¡EL REGALO LO GANÓ LA PERSONA 24 A LA DERECHA!";
       btn.disabled = true;
     } else {
       const msg = messages[Math.floor(Math.random() * messages.length)];
