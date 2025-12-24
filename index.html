@@ -3,28 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ruleta del Regalo secreto</title>
+  <title>Ruleta Navideña</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <div class="container">
 
-    <h1>🎄 Ruleta del Regalo secreto 🎁</h1>
+  <h1>🎄 Ruleta de Regalos 🎁</h1>
 
-    <div class="wheel-container">
-      <div id="wheel"></div>
-      <div class="pointer">▼</div>
-    </div>
-
-    <button id="spinBtn">GIRAR</button>
-
-    <div id="result"></div>
-
+  <div class="roulette-container">
+    <div id="pointer"></div>
+    <canvas id="wheel" width="400" height="400"></canvas>
   </div>
+
+  <button id="spinBtn">GIRAR 🎡</button>
+
+  <p id="result"></p>
 
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
