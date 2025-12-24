@@ -2,23 +2,34 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Ruleta del Regalo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎄 Ruleta del Regalo 🎁</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>🎄 Ruleta del Regalo 🎁</h1>
+  <h1>🎄 Ruleta del Regalo 🎁</h1>
 
-<div id="wheel-container">
-  <div id="wheel"></div>
-  <div id="pointer">▼</div>
-</div>
+  <div id="wheel-container">
+    <div id="pointer"></div>
 
-<p id="result">Tocá la ruleta para empezar</p>
+    <div id="wheel"></div>
 
-<audio id="tick" src="tick.mp3"></audio>
+    <div class="labels">
+      <span style="--i:0">Izquierda</span>
+      <span style="--i:1">Derecha</span>
+      <span style="--i:2">Al frente</span>
+      <span style="--i:3">Respirá</span>
+      <span style="--i:4">Se queda</span>
+      <span style="--i:5">Regalá</span>
+      <span style="--i:6">Suspenso</span>
+      <span style="--i:7">🎁 TUYO</span>
+    </div>
+  </div>
 
-<script src="script.js"></script>
+  <button id="spinBtn">Girar</button>
+
+  <div id="result"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>
