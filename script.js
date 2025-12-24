@@ -37,4 +37,6 @@ wheel.onclick = () => {
   setTimeout(() => {
     result.textContent = texts[index];
   }, 4000);
+  counter.textContent = `Giro ${spins} de ${TOTAL_SPINS}`;
+
 };
