@@ -1,58 +1,54 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #f6f7fb;
+  background: #051522;
+  color: #fff;
+  font-family: "Poppins", system-ui, Arial;
   text-align: center;
-  padding: 20px;
+  padding: 24px;
 }
 
 h1 {
-  margin-bottom: 25px;
+  margin-bottom: 18px;
 }
 
-.roulette-container {
+.wheel-container {
   position: relative;
   display: inline-block;
   margin-bottom: 35px;
 }
 
-#pointer {
-  width: 0;
-  height: 0;
-  border-left: 18px solid transparent;
-  border-right: 18px solid transparent;
-  border-bottom: 28px solid #e63946;
-  position: absolute;
-  top: -32px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
 #wheel {
   border-radius: 50%;
-  border: 6px solid #333;
+  border: 10px solid #ffffff;
+}
+
+#pointer {
+  position: absolute;
+  top: -45px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px;
 }
 
 #spinBtn {
-  margin-top: 25px;
-  padding: 14px 26px;
+  margin-top: 30px;
+  padding: 14px 30px;
   font-size: 18px;
-  border-radius: 999px;
+  border-radius: 14px;
   border: none;
-  background: #2a9d8f;
-  color: white;
+  background: #e63946;
+  color: #fff;
   cursor: pointer;
 }
 
-#spinBtn:disabled {
-  background: #999;
-  cursor: not-allowed;
+#result {
+  margin-top: 28px;
+  font-size: 22px;
+  font-weight: 700;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-#result {
-  margin-top: 25px;
-  font-size: 20px;
-  min-height: 28px;
-}
 
 
 
