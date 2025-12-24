@@ -22,7 +22,7 @@ h1 {
   position: relative;
   width: 360px;
   height: 360px;
-  margin: 0 auto 48px auto; /* 🔥 ESPACIO REAL */
+  margin: 0 auto 48px auto;
 }
 
 #wheel {
@@ -43,13 +43,15 @@ h1 {
   transition: transform 3s cubic-bezier(.17,.67,.36,1);
 }
 
+/* 🔺 TRIÁNGULO AJUSTADO */
 .pointer {
   position: absolute;
-  top: -20px;
+  top: -34px;           /* 👈 MÁS SEPARACIÓN */
   left: 50%;
   transform: translateX(-50%);
-  font-size: 30px;
+  font-size: 34px;      /* un poco más visible */
   color: gold;
+  text-shadow: 0 3px 6px rgba(0,0,0,0.4);
 }
 
 #spinBtn {
