@@ -1,38 +1,96 @@
 body {
-  background: radial-gradient(circle, #3b0000, #000);
+  background: radial-gradient(circle, #3b0000, #120000);
   color: white;
+  font-family: Arial, sans-serif;
   text-align: center;
-  font-family: Arial Black, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 3rem;
+  margin: 30px 0;
 }
 
 #wheel-container {
+  position: relative;
   width: 420px;
   height: 420px;
-  margin: 30px auto;
-  position: relative;
+  margin: 0 auto;
 }
 
 #wheel {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 10px solid gold;
+  border: 14px solid gold;
   background: conic-gradient(
-    red 0deg 45deg,
-    green 45deg 90deg,
-    red 90deg 135deg,
-    green 135deg 180deg,
-    red 180deg 225deg,
-    green 225deg 270deg,
-    red 270deg 315deg,
-    green 315deg 360deg
+    #e63946 0deg 45deg,
+    #2a9d8f 45deg 90deg,
+    #e63946 90deg 135deg,
+    #2a9d8f 135deg 180deg,
+    #e63946 180deg 225deg,
+    #2a9d8f 225deg 270deg,
+    #e63946 270deg 315deg,
+    #2a9d8f 315deg 360deg
   );
-  transition: transform 4s cubic-bezier(.1,.7,.1,1);
+  transition: transform 1s ease-out;
 }
 
 #pointer {
   position: absolute;
-  top: -15px;
+  top: -18px;
   left: 50%;
   transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-bottom: 28px solid white;
+  z-index: 10;
+}
+
+/* TEXTOS DE LOS SEGMENTOS */
+.labels {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.labels span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: 0 0;
+  transform:
+    rotate(calc(var(--i) * 45deg))
+    translate(155px)
+    rotate(90deg);
+  font-size: 1rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* BOTÓN */
+button {
+  margin-top: 30px;
+  padding: 14px 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: gold;
+}
+
+/* RESULTADO FINAL */
+#result {
+  margin-top: 30px;
+  font-size: 2.6rem;
+  font-weight: bold;
+  min-height: 90px;
+  text-transform: uppercase;
 }
