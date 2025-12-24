@@ -1,82 +1,59 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: radial-gradient(circle at top, #2b0000, #120000);
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-.container {
+  font-family: Arial, sans-serif;
+  background: #f6f7fb;
   text-align: center;
+  padding: 20px;
 }
 
 h1 {
-  margin-bottom: 28px;
-  font-size: 48px;
+  margin-bottom: 25px;
 }
 
-.wheel-container {
+.roulette-container {
   position: relative;
-  width: 360px;
-  height: 360px;
-  margin: 0 auto 48px auto;
+  display: inline-block;
+  margin-bottom: 35px;
+}
+
+#pointer {
+  width: 0;
+  height: 0;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-bottom: 28px solid #e63946;
+  position: absolute;
+  top: -32px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 #wheel {
-  width: 100%;
-  height: 100%;
   border-radius: 50%;
-  border: 16px solid gold;
-  background: conic-gradient(
-    #e63946 0deg 45deg,
-    #2a9d8f 45deg 90deg,
-    #e63946 90deg 135deg,
-    #2a9d8f 135deg 180deg,
-    #e63946 180deg 225deg,
-    #2a9d8f 225deg 270deg,
-    #e63946 270deg 315deg,
-    #2a9d8f 315deg 360deg
-  );
-  transition: transform 3s cubic-bezier(.17,.67,.36,1);
-}
-
-/* 🔺 TRIÁNGULO AJUSTADO */
-.pointer {
-  position: absolute;
-  top: -34px;           /* 👈 MÁS SEPARACIÓN */
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 34px;      /* un poco más visible */
-  color: gold;
-  text-shadow: 0 3px 6px rgba(0,0,0,0.4);
+  border: 6px solid #333;
 }
 
 #spinBtn {
-  padding: 18px 38px;
-  font-size: 22px;
-  font-weight: bold;
+  margin-top: 25px;
+  padding: 14px 26px;
+  font-size: 18px;
+  border-radius: 999px;
   border: none;
-  border-radius: 16px;
-  background: gold;
-  color: #2b0000;
+  background: #2a9d8f;
+  color: white;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
 }
 
 #spinBtn:disabled {
-  opacity: 0.6;
+  background: #999;
   cursor: not-allowed;
 }
 
 #result {
-  margin-top: 32px;
-  font-size: 36px;
-  font-weight: 800;
-  min-height: 44px;
+  margin-top: 25px;
+  font-size: 20px;
+  min-height: 28px;
 }
+
 
 
 
