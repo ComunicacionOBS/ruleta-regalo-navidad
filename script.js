@@ -7,14 +7,14 @@ let spinCount = 0;
 const TOTAL_SPINS = 15;
 
 const messages = [
-  "Pásalo a la derecha 👉",
-  "Pásalo a la izquierda 👈",
-  "Al del frente 👀",
-  "El regalo se queda con…",
-  "El regalo es para…",
-  "Respirá… 😮‍💨",
-  "Todo puede pasar…",
-  "Últimos giros… 🔥"
+  "PÁSALO A LA DERECHA 👉",
+  "PÁSALO A LA IZQUIERDA 👈",
+  "AL DEL FRENTE 👀",
+  "EL REGALO SE QUEDA CON…",
+  "EL REGALO ES PARA…",
+  "RESPIRÁ… 😮‍💨",
+  "TODO PUEDE PASAR…",
+  "ÚLTIMOS GIROS… 🔥"
 ];
 
 btn.addEventListener("click", () => {
@@ -37,4 +37,5 @@ btn.addEventListener("click", () => {
     }
   }, 3200);
 });
+
 
