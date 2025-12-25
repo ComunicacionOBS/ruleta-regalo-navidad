@@ -12,19 +12,36 @@ body{
   text-align:center;
   font-family:Arial, Helvetica, sans-serif;
 }
-#ruleta{
+
+#container{
+  position:relative;
+  width:420px;
+  margin:25px auto;
+}
+
+#pointer{
+  width:0;
+  height:0;
+  border-left:14px solid transparent;
+  border-right:14px solid transparent;
+  border-bottom:22px solid #ffd000;
+  position:absolute;
+  top:-18px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:5;
+}
+
+#wheel{
   width:400px;
   height:400px;
   border-radius:50%;
-  border:6px solid white;
-  margin:25px auto;
-  position:relative;
-  overflow:hidden;
+  border:6px solid #fff;
+  display:block;
+  margin:auto;
+  transition:4s ease-out;
 }
-#ruleta canvas{
-  width:100%;
-  height:100%;
-}
+
 button{
   padding:12px 24px;
   font-size:16px;
@@ -33,7 +50,9 @@ button{
   cursor:pointer;
   background:#e63946;
   color:white;
+  margin-top:14px;
 }
+
 button:disabled{
   opacity:.5;
   cursor:not-allowed;
@@ -42,93 +61,94 @@ button:disabled{
 </head>
 
 <body>
+
 <h2>🎄 Ruleta del Regalo 🎁</h2>
 
-<div id="ruleta">
+<div id="container">
+  <div id="pointer"></div>
   <canvas id="wheel" width="400" height="400"></canvas>
 </div>
 
 <button id="btn">GIRAR</button>
 
 <script>
-const opcionesOriginal = [
-"CAMBIÁS CON LA PERSONA A LA DERECHA",
-"CAMBIÁS CON LA PERSONA A LA IZQUIERDA",
-"TE QUEDÁS CON TU REGALO",
-"ROBAR AL QUE TIENE EL REGALO MÁS GRANDE",
-"ROBAR AL QUE TIENE EL REGALO MÁS PEQUEÑO",
-"CAMBIAN LOS DOS QUE LLEGARON MÁS TARDE",
-"CAMBIA EL QUE PONE LA MÚSICA",
-"CAMBIÁS CON QUIEN HA BAILADO MÁS",
-"CAMBIÁS CON LA PERSONA DE ENFRENTE",
-"CAMBIÁS CON QUIEN MÁS HA REÍDO",
-"CAMBIÁS CON QUIEN HA HABLADO MÁS",
-"CAMBIÁS CON QUIEN VINO DE ROJO",
-"CAMBIÁS CON QUIEN TIENE GORRO",
-"CAMBIÁS CON QUIEN TIENE LENTES",
-"CAMBIÁS CON QUIEN TIENE TAZA"
-];
+document.addEventListener("DOMContentLoaded", () => {
 
-// Se baraja solo una vez
-let opciones = [...opcionesOriginal].sort(() => Math.random() - 0.5);
+  const opciones = [
+    "CAMBIÁS CON EL DE LA IZQUIERDA",
+    "CAMBIÁS CON EL DE LA DERECHA",
+    "ROBAR AL MÁS NAVIDEÑO",
+    "ROBAR AL MÁS HAMBRIENTO",
+    "CAMBIÁS CON QUIEN PONE LA MÚSICA",
+    "CAMBIÁS CON QUIEN HA BAILADO MÁS",
+    "CAMBIÁS CON EL DE ENFRENTE",
+    "ROBAR AL QUE LLEGÓ MÁS TARDE",
+    "CAMBIÁS CON QUIEN HA REÍDO MÁS",
+    "CAMBIÁS CON QUIEN TIENE GORRO",
+    "CAMBIÁS CON QUIEN TIENE LENTES",
+    "TE QUEDÁS CON TU REGALO",
+    "TODOS CAMBIAN A LA IZQUIERDA",
+    "TODOS CAMBIAN A LA DERECHA",
+    "EL REGALO VIAJA 3 A LA IZQUIERDA"
+  ];
 
-let ctx = document.getElementById("wheel").getContext("2d");
-let btn = document.getElementById("btn");
+  // Barajamos una sola vez (para que no se repitan)
+  const frases = [...opciones];
 
-const maxSpins = 15;
-let spinCount = 0;
-let currentRotation = 0;
+  const canvas = document.getElementById("wheel");
+  const ctx = canvas.getContext("2d");
+  const btn = document.getElementById("btn");
 
-function dibujarRuleta() {
-  const total = opciones.length;
-  const angulo = (2 * Math.PI) / total;
+  const total = frases.length;
+  const ang = (2 * Math.PI) / total;
 
-  for (let i = 0; i < total; i++) {
-    ctx.beginPath();
-    ctx.moveTo(200, 200);
-    ctx.fillStyle = i % 2 === 0 ? "#BB0000" : "#0b3b82";
-    ctx.arc(200, 200, 200, i * angulo, (i + 1) * angulo);
-    ctx.fill();
-    ctx.save();
+  function dibujar() {
+    ctx.clearRect(0,0,400,400);
 
-    ctx.translate(200, 200);
-    ctx.rotate(i * angulo + angulo / 2);
-    ctx.fillStyle = "white";
-    ctx.font = "bold 12px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText(opciones[i], 90, 5);
-    ctx.restore();
+    for(let i=0;i<total;i++){
+      ctx.beginPath();
+      ctx.moveTo(200,200);
+      ctx.fillStyle = i % 2 === 0 ? "#BB0000" : "#0b3b82";
+      ctx.arc(200,200,200, i*ang, (i+1)*ang);
+      ctx.fill();
+      ctx.save();
+
+      ctx.translate(200,200);
+      ctx.rotate(i*ang + ang/2);
+      ctx.fillStyle="white";
+      ctx.font="bold 12px Arial";
+      ctx.textAlign="center";
+      ctx.fillText(frases[i], 95, 5);
+      ctx.restore();
+    }
   }
-}
 
-function girar() {
-  if (spinCount >= maxSpins) return;
+  dibujar();
 
-  spinCount++;
+  let spins = 0;
+  const maxSpins = 15;
+  let rotation = 0;
 
-  const index = (spinCount - 1) % opciones.length;
-  const gradosPorOpcion = 360 / opciones.length;
-  const destino = 360 - (index * gradosPorOpcion + gradosPorOpcion / 2);
+  btn.addEventListener("click", () => {
+    if (spins >= maxSpins) return;
 
-  currentRotation += 720 + destino;
+    spins++;
 
-  document.getElementById("wheel").style.transition = "4s ease-out";
-  document.getElementById("wheel").style.transform = `rotate(${currentRotation}deg)`;
+    const gradosPor = 360 / total;
+    const destino = 360 - ((spins-1) * gradosPor + gradosPor/2);
 
-  if (spinCount === maxSpins) {
-    btn.disabled = true;
-    btn.textContent = "Se acabaron los giros 🎄";
-  }
-}
+    rotation += 720 + destino;
 
-dibujarRuleta();
-btn.addEventListener("click", girar);
+    canvas.style.transform = `rotate(${rotation}deg)`;
+
+    if (spins === maxSpins){
+      btn.disabled = true;
+      btn.textContent = "🎁 ¡FIN DEL JUEGO!";
+    }
+  });
+
+});
 </script>
 
 </body>
 </html>
-
-
-
-
-
