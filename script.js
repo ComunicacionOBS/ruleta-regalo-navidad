@@ -1,106 +1,132 @@
-const wheel = document.getElementById("wheel");
-const ctx = wheel.getContext("2d");
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ruleta del Regalo</title>
 
-const btn = document.getElementById("spinBtn");
-const result = document.getElementById("result");
-const tickSound = document.getElementById("tick");
+<style>
+body{
+  background:#051026;
+  color:white;
+  text-align:center;
+  font-family:Arial, Helvetica, sans-serif;
+}
+#ruleta{
+  width:400px;
+  height:400px;
+  border-radius:50%;
+  border:6px solid white;
+  margin:25px auto;
+  position:relative;
+  overflow:hidden;
+}
+#ruleta canvas{
+  width:100%;
+  height:100%;
+}
+button{
+  padding:12px 24px;
+  font-size:16px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  background:#e63946;
+  color:white;
+}
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+</style>
+</head>
 
-let rotation = 0;
-let spinning = false;
+<body>
+<h2>🎄 Ruleta del Regalo 🎁</h2>
 
-let messages = [
-  "PÁSALO 3 A LA IZQUIERDA 👈",
-  "PÁSALO AL DEL FRENTE 👀",
-  "PÁSALO 5 A LA DERECHA 👉",
-  "EL QUE LLEGÓ MÁS TARDE LO TIENE ⏰",
-  "PÁSALO AL MÁS NAVIDEÑO 🎄",
-  "CAMBIAN DE LUGAR TODOS 🙃",
-  "PÁSALO AL QUE PONE LA MÚSICA 🎵",
-  "PÁSALO AL QUE HA COMIDO MÁS 🍗",
-  "PÁSALO AL QUE HA HABLADO MENOS 🤫",
-  "PÁSALO 2 A LA IZQUIERDA 👈",
-  "PÁSALO 4 A LA DERECHA 👉",
-  "PONLO EN EL CENTRO Y TODOS SE MEZCLAN 🔁"
+<div id="ruleta">
+  <canvas id="wheel" width="400" height="400"></canvas>
+</div>
+
+<button id="btn">GIRAR</button>
+
+<script>
+const opcionesOriginal = [
+"CAMBIÁS CON LA PERSONA A LA DERECHA",
+"CAMBIÁS CON LA PERSONA A LA IZQUIERDA",
+"TE QUEDÁS CON TU REGALO",
+"ROBAR AL QUE TIENE EL REGALO MÁS GRANDE",
+"ROBAR AL QUE TIENE EL REGALO MÁS PEQUEÑO",
+"CAMBIAN LOS DOS QUE LLEGARON MÁS TARDE",
+"CAMBIA EL QUE PONE LA MÚSICA",
+"CAMBIÁS CON QUIEN HA BAILADO MÁS",
+"CAMBIÁS CON LA PERSONA DE ENFRENTE",
+"CAMBIÁS CON QUIEN MÁS HA REÍDO",
+"CAMBIÁS CON QUIEN HA HABLADO MÁS",
+"CAMBIÁS CON QUIEN VINO DE ROJO",
+"CAMBIÁS CON QUIEN TIENE GORRO",
+"CAMBIÁS CON QUIEN TIENE LENTES",
+"CAMBIÁS CON QUIEN TIENE TAZA"
 ];
 
-// para no repetir
-let remaining = [...messages];
+// Se baraja solo una vez
+let opciones = [...opcionesOriginal].sort(() => Math.random() - 0.5);
 
-const slice = (Math.PI * 2) / messages.length;
+let ctx = document.getElementById("wheel").getContext("2d");
+let btn = document.getElementById("btn");
 
-function drawWheel() {
-  for (let i = 0; i < messages.length; i++) {
+const maxSpins = 15;
+let spinCount = 0;
+let currentRotation = 0;
+
+function dibujarRuleta() {
+  const total = opciones.length;
+  const angulo = (2 * Math.PI) / total;
+
+  for (let i = 0; i < total; i++) {
     ctx.beginPath();
-    ctx.moveTo(210, 210);
-    ctx.arc(210, 210, 210, slice * i, slice * (i + 1));
-    ctx.closePath();
-    ctx.fillStyle = i % 2 === 0 ? "#c1121f" : "#1d3557";
+    ctx.moveTo(200, 200);
+    ctx.fillStyle = i % 2 === 0 ? "#BB0000" : "#0b3b82";
+    ctx.arc(200, 200, 200, i * angulo, (i + 1) * angulo);
     ctx.fill();
+    ctx.save();
+
+    ctx.translate(200, 200);
+    ctx.rotate(i * angulo + angulo / 2);
+    ctx.fillStyle = "white";
+    ctx.font = "bold 12px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(opciones[i], 90, 5);
+    ctx.restore();
   }
 }
 
-drawWheel();
+function girar() {
+  if (spinCount >= maxSpins) return;
 
-function spin() {
-  if (spinning) return;
-  spinning = true;
+  spinCount++;
 
-  result.innerText = "";
+  const index = (spinCount - 1) % opciones.length;
+  const gradosPorOpcion = 360 / opciones.length;
+  const destino = 360 - (index * gradosPorOpcion + gradosPorOpcion / 2);
 
-  // sonido
-  let interval = setInterval(() => tickSound.play(), 80);
+  currentRotation += 720 + destino;
 
-  const extra = 1080 + Math.random() * 720;
-  rotation += extra;
+  document.getElementById("wheel").style.transition = "4s ease-out";
+  document.getElementById("wheel").style.transform = `rotate(${currentRotation}deg)`;
 
-  wheel.style.transition = "4s ease-out";
-  wheel.style.transform = `rotate(${rotation}deg)`;
-
-  setTimeout(() => {
-    clearInterval(interval);
-
-    const normalized = rotation % 360;
-    const index = Math.floor(
-      (messages.length - normalized / (360 / messages.length)) % messages.length
-    );
-
-    // elegir mensaje sin repetir
-    if (remaining.length === 0) remaining = [...messages];
-    const msgIndex = Math.floor(Math.random() * remaining.length);
-    const msg = remaining.splice(msgIndex, 1)[0];
-
-    result.innerText = msg;
-
-    // confetti final cuando se acaben mensajes
-    if (remaining.length === 0) launchConfetti();
-
-    spinning = false;
-  }, 4200);
+  if (spinCount === maxSpins) {
+    btn.disabled = true;
+    btn.textContent = "Se acabaron los giros 🎄";
+  }
 }
 
-btn.addEventListener("click", spin);
+dibujarRuleta();
+btn.addEventListener("click", girar);
+</script>
 
-// 🎉 confetti simple
-function launchConfetti() {
-  const duration = 2000;
-  const end = Date.now() + duration;
-
-  (function frame() {
-    const colors = ["#ff0", "#0f0", "#0ff", "#f0f", "#ff5733"];
-    const div = document.createElement("div");
-    div.innerHTML = "🎉";
-    div.style.position = "fixed";
-    div.style.left = Math.random() * 100 + "vw";
-    div.style.top = "-20px";
-    div.style.fontSize = "28px";
-    div.style.animation = "fall 2s linear forwards";
-    document.body.appendChild(div);
-
-    setTimeout(() => div.remove(), 2000);
-
-    if (Date.now() < end) requestAnimationFrame(frame);
-  })();
-}
+</body>
+</html>
 
 
 
