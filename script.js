@@ -1,31 +1,32 @@
 const wheel = document.getElementById("wheel");
+const ctx = wheel.getContext("2d");
+
 const btn = document.getElementById("spinBtn");
 const result = document.getElementById("result");
-const tickSound = document.getElementById("tickSound");
+const tickSound = document.getElementById("tick");
 
 let rotation = 0;
-let spinCount = 0;
-const TOTAL_SPINS = 15;
+let spinning = false;
 
 let messages = [
-  "LO DEBE TENER EL QUE LLEGÓ MÁS TARDE",
   "PÁSALO 3 A LA IZQUIERDA 👈",
   "PÁSALO AL DEL FRENTE 👀",
-  "PÁSALO 7 A LA DERECHA 👉",
-  "LO TIENE EL MÁS NAVIDEÑO 🎄",
-  "AHORA LO TIENE QUIEN MÁS HA COMIDO 🍗",
-  "DÁSELO AL QUE HA HABLADO MENOS 🤫",
-  "PÁSALO 5 A LA IZQUIERDA 👈",
-  "PÁSALO AL MÁS FASHIONISTA ✨",
-  "PÁSALO 1 A LA IZQUIERDA 👈",
-  "PÁSALO A QUIEN HA BAILADO MÁS 💃",
-  "PÁSALO AL QUE PONE LA MÚSICA 🎶",
-  "TODOS CAMBIAN DE LUGAR 🤯"
+  "PÁSALO 5 A LA DERECHA 👉",
+  "EL QUE LLEGÓ MÁS TARDE LO TIENE ⏰",
+  "PÁSALO AL MÁS NAVIDEÑO 🎄",
+  "CAMBIAN DE LUGAR TODOS 🙃",
+  "PÁSALO AL QUE PONE LA MÚSICA 🎵",
+  "PÁSALO AL QUE HA COMIDO MÁS 🍗",
+  "PÁSALO AL QUE HA HABLADO MENOS 🤫",
+  "PÁSALO 2 A LA IZQUIERDA 👈",
+  "PÁSALO 4 A LA DERECHA 👉",
+  "PONLO EN EL CENTRO Y TODOS SE MEZCLAN 🔁"
 ];
 
-// dibujar ruleta
-const ctx = wheel.getContext("2d");
-const slice = (2 * Math.PI) / messages.length;
+// para no repetir
+let remaining = [...messages];
+
+const slice = (Math.PI * 2) / messages.length;
 
 function drawWheel() {
   for (let i = 0; i < messages.length; i++) {
@@ -33,71 +34,73 @@ function drawWheel() {
     ctx.moveTo(210, 210);
     ctx.arc(210, 210, 210, slice * i, slice * (i + 1));
     ctx.closePath();
-
     ctx.fillStyle = i % 2 === 0 ? "#c1121f" : "#1d3557";
     ctx.fill();
-
-    ctx.save();
-    ctx.translate(210, 210);
-    ctx.rotate(slice * i + slice / 2);
-    ctx.fillStyle = "white";
-    ctx.font = "14px Poppins";
-    ctx.textAlign = "right";
-    ctx.fillText(messages[i], 185, 5);
-    ctx.restore();
   }
 }
 
 drawWheel();
 
-btn.addEventListener("click", () => {
-  if (spinCount >= TOTAL_SPINS) return;
+function spin() {
+  if (spinning) return;
+  spinning = true;
 
-  spinCount++;
+  result.innerText = "";
 
-  // reproducir sonido de clic
-  tickSound.currentTime = 0;
-  tickSound.play();
+  // sonido
+  let interval = setInterval(() => tickSound.play(), 80);
 
-  const extra = 720 + Math.random() * 360;
+  const extra = 1080 + Math.random() * 720;
   rotation += extra;
-  wheel.style.transition = "3.4s ease-out";
+
+  wheel.style.transition = "4s ease-out";
   wheel.style.transform = `rotate(${rotation}deg)`;
 
   setTimeout(() => {
-    // último giro
-    if (spinCount === TOTAL_SPINS) {
-      result.innerText = "🤯 PARECE QUE YA HAY UNA DECISIÓN…";
+    clearInterval(interval);
 
-      setTimeout(() => {
-        result.innerText = "😱 PERO ESPEREN…";
-      }, 1500);
+    const normalized = rotation % 360;
+    const index = Math.floor(
+      (messages.length - normalized / (360 / messages.length)) % messages.length
+    );
 
-      setTimeout(() => {
-        result.innerText = "🎉🎁 ¡AHORA SÍ SE DEFINE!";
-      }, 3000);
+    // elegir mensaje sin repetir
+    if (remaining.length === 0) remaining = [...messages];
+    const msgIndex = Math.floor(Math.random() * remaining.length);
+    const msg = remaining.splice(msgIndex, 1)[0];
 
-      setTimeout(() => {
-        // efecto de confeti
-        confetti({
-          particleCount: 150,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
-      }, 3800);
+    result.innerText = msg;
 
-      btn.disabled = true;
-      return;
-    }
+    // confetti final cuando se acaben mensajes
+    if (remaining.length === 0) launchConfetti();
 
-    // mensaje sin repetir
-    const index = Math.floor(Math.random() * messages.length);
-    const chosen = messages[index];
-    messages.splice(index, 1);
+    spinning = false;
+  }, 4200);
+}
 
-    result.innerText = chosen;
-  }, 3400);
-});
+btn.addEventListener("click", spin);
+
+// 🎉 confetti simple
+function launchConfetti() {
+  const duration = 2000;
+  const end = Date.now() + duration;
+
+  (function frame() {
+    const colors = ["#ff0", "#0f0", "#0ff", "#f0f", "#ff5733"];
+    const div = document.createElement("div");
+    div.innerHTML = "🎉";
+    div.style.position = "fixed";
+    div.style.left = Math.random() * 100 + "vw";
+    div.style.top = "-20px";
+    div.style.fontSize = "28px";
+    div.style.animation = "fall 2s linear forwards";
+    document.body.appendChild(div);
+
+    setTimeout(() => div.remove(), 2000);
+
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
+}
 
 
 
