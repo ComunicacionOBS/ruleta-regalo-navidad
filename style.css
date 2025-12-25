@@ -1,59 +1,49 @@
 body {
-  background: #051522;
-  color: #fff;
-  font-family: "Poppins", system-ui, Arial;
+  margin: 0;
+  background: radial-gradient(#090909, #1a1a1a);
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
   text-align: center;
-  padding: 24px;
 }
 
 h1 {
-  margin-bottom: 18px;
+  margin-top: 20px;
+  font-size: 34px;
 }
 
 .wheel-container {
   position: relative;
-  display: inline-block;
-  margin-bottom: 35px;
+  width: 420px;
+  margin: 20px auto 40px;
 }
 
-#wheel {
-  border-radius: 50%;
-  border: 10px solid #fff;
-}
-
-#pointer {
+.pointer {
   position: absolute;
-  top: -45px;
+  top: -10px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 30px;
+  font-size: 32px;
 }
 
-#spinBtn {
-  margin-top: 30px;
-  padding: 14px 30px;
-  font-size: 18px;
+button {
+  background: #ffd000;
   border: none;
-  border-radius: 14px;
-  background: #e63946;
-  color: #fff;
+  padding: 12px 28px;
+  font-size: 18px;
+  border-radius: 12px;
   cursor: pointer;
+  font-weight: bold;
 }
 
-#spinBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+button:disabled {
+  opacity: 0.5;
 }
 
 #result {
-  margin-top: 28px;
-  font-size: 22px;
-  font-weight: 700;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-top: 35px;
+  font-size: 30px;
+  font-weight: bold;
 }
-
 
 
 
